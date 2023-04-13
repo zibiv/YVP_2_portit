@@ -1,5 +1,13 @@
 import './globals.css'
 import Nav from './auth/Nav'
+import { Roboto } from '@next/font/google'
+import QueryWrapper from "./query/QueryWrapper"
+
+const roboto = Roboto({
+  subsets: ['cyrillic', 'latin'],
+  weight: ['400', '700'],
+  variable: '--font-roboto'
+})
 
 export const metadata = {
   title: 'PORTiT',
@@ -11,9 +19,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Nav />
-        {children}
+      <body className={`${roboto.variable} mx-4 md:mx-48 xl:mx-96 bg-gray-200`}>
+        <QueryWrapper>
+          <Nav />
+          {children}
+        </QueryWrapper>
       </body>
     </html>
   )
