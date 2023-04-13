@@ -21,7 +21,7 @@ export default async function Nav() {
         <h3>Hello {!!session ? session.user!.name : "friend"}</h3>
       </div>
       <ul className="flex items-center gap-6 ml-2">
-        {!!session ? <Logged /> : <Login />}
+        {!!session ? <Logged userPick={session.user?.image || "https://placekitten.com/100/100"} /> : <Login />}
       </ul>
     </nav>
   )
