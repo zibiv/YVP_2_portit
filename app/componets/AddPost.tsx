@@ -2,34 +2,39 @@
 
 import { FormEvent, useEffect, useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
+import { Toaster, toast } from "react-hot-toast"
 
 export default function CreatePost() {
   const [title, setTitle] = useState("")
   const [isDisabled, setIsDisabled] = useState(false)
+  let toastPostId: string = "addPostToast"
 
-  function resetForm () {
+  function resetForm() {
     setIsDisabled(false)
-    setTitle('')
+    setTitle("")
   }
 
   //create post
   const mutation = useMutation(
-    (title: string) => axios.post('/api/posts/addPost', { title }),
+    (title: string) => axios.post("/api/posts/addPost", { title }),
     {
-      onError: (error: ErrorEvent) => {
-        console.log("There is an error: " + error.message)
+      onError: (error) => {
+        console.log(error)
+        if (error instanceof AxiosError) {
+          toast.error("Ошибка: \n" + error?.response?.data.msg, { id: toastPostId })
+        }
+        setIsDisabled(false)
       },
       onSuccess: (data) => {
         resetForm()
         console.log(data)
+        toast.success("Запись добавлена", { id: toastPostId })
         console.warn("OK")
         //обновление списка постов данного пользователя в компоненте ...
       },
-      
     }
   )
-
 
   useEffect(() => {
     if (title.length > 300) {
@@ -42,18 +47,27 @@ export default function CreatePost() {
   async function submitPost(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsDisabled(true)
-    mutation.mutate(title);
+    toast.loading("Создаем вашу запись", {id: toastPostId})
+    mutation.mutate(title)
   }
 
   return (
-    <form className="bg-white my-8 p-8 rounded-xl shadow-sm" onSubmit={submitPost}>
+    <form
+      className="bg-white my-8 p-8 rounded-xl shadow-sm"
+      onSubmit={submitPost}
+    >
       <div className="flex flex-col my-4">
+        <div>
+          <Toaster position="bottom-right" reverseOrder={false} />
+        </div>
         <textarea
           className="text-lg rounded-md p-4 my-2 bg-gray-200"
           name="title"
           value={title}
           id="title"
-          onChange={(e) => {setTitle(e.target.value)}}
+          onChange={(e) => {
+            setTitle(e.target.value)
+          }}
           placeholder="Запишите свои мысли здесь…"
         ></textarea>
       </div>
