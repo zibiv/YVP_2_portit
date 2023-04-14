@@ -8,9 +8,26 @@ export default function CreatePost() {
   const [title, setTitle] = useState("")
   const [isDisabled, setIsDisabled] = useState(false)
 
+  function resetForm () {
+    setIsDisabled(false)
+    setTitle('')
+  }
+
   //create post
   const mutation = useMutation(
-    (title: string) => axios.post('/api/posts/addPost', { title })
+    (title: string) => axios.post('/api/posts/addPost', { title }),
+    {
+      onError: (error: ErrorEvent) => {
+        console.log("There is an error: " + error.message)
+      },
+      onSuccess: (data) => {
+        resetForm()
+        console.log(data)
+        console.warn("OK")
+        //обновление списка постов данного пользователя в компоненте ...
+      },
+      
+    }
   )
 
 

@@ -10,10 +10,13 @@ export default async function handler(
 ) { 
 
   if(req.method === "POST") {
+    //получаем объект сессии
     const session = await getServerSession(req, res, authOptions)
+    //если сессии нет, то просим залогинится
     if(!session) 
       return res.status(401).json({ msg: "Пожалуйста залогинтесь для того что бы разместить запись"})
-      
+    
+    //если данные сессии есть то используя email можем получить данные пользователя из БД
     //получение данных пользователя
     const user = await prisma.user.findUnique({
       where: {
@@ -21,12 +24,14 @@ export default async function handler(
       }
     })
 
+    //если пользователя с таким email в базе нет то отправляем 404 статус
     if(!user)
       return res.status(404).json({ msg: "Такого пользователя не существует" })
 
-
+    //получаем название поста из тела запроса
     const title: string = req.body.title
 
+    //проверяем условия связанные с размерами названия
     if(title.length > 300 || title.length === 0) 
       return res.status(403).json({ msg: "Ваше сообщение либо большое 300 символов или пустое" })
 
