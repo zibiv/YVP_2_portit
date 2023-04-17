@@ -9,7 +9,15 @@ export default async function handler(
   if (req.method === "GET") {
 
     try {
-      const data = prisma.post.findMany()
+      const data = await prisma.post.findMany({
+        include: {
+          user: true
+        },
+        orderBy: {
+          createdAt: "desc"
+        }
+      })
+      console.log(data)
       res.status(200).json(data)
     } catch(err) {
       res.status(403).json({ err: "Ошибка получения записей с сервера" })
