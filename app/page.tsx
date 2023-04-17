@@ -4,7 +4,7 @@ import axios from "axios"
 import AddPost from "./componets/AddPost"
 import { useQuery } from "@tanstack/react-query"
 import Post from "./componets/Post"
-
+import { type Post as DBPost } from "./types/Posts"
 //получение всех постов
 async function fetchAllPost() {
   const response = await axios.get('/api/posts/getPosts')
@@ -12,7 +12,7 @@ async function fetchAllPost() {
 }
 
 export default function Home() {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery<DBPost[]>({
     queryFn: fetchAllPost,
     queryKey: ['posts'],
   })
@@ -20,15 +20,18 @@ export default function Home() {
   if(error) return error
   if(isLoading) return <h1>Loading ...</h1>
 
+  console.log(data)
+
   return (
       <main className="flex justify-start my-4 flex-col">
         <AddPost />
-        {data.map(post => {
+        {data?.map(post => {
           const props = {
             id: post.id,
             userPick: post.user.image,
             name: post.user.name,
             postTitle: post.title,
+            comments: post.comments
           }
           return <Post key={post.id} { ...props }/>
         })}
