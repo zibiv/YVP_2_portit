@@ -1,13 +1,14 @@
 "use client"
 
 import { FormEvent, useEffect, useState } from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
 import { Toaster, toast } from "react-hot-toast"
 
 export default function CreatePost() {
   const [title, setTitle] = useState("")
   const [isDisabled, setIsDisabled] = useState(false)
+  const qClient = useQueryClient()
   let toastPostId: string = "addPostToast"
 
   function resetForm() {
@@ -28,7 +29,7 @@ export default function CreatePost() {
       },
       onSuccess: (data) => {
         resetForm()
-        console.log(data)
+        qClient.invalidateQueries(["posts"])
         toast.success("Запись добавлена", { id: toastPostId })
         console.warn("OK")
         //обновление списка постов данного пользователя в компоненте ...
@@ -61,7 +62,8 @@ export default function CreatePost() {
           <Toaster position="bottom-right" reverseOrder={false} />
         </div>
         <textarea
-          className="text-lg rounded-md p-4 my-2 bg-gray-200"
+          className="text-lg rounded-md p-4 my-2 bg-gray-200
+          focus:outline-none focus:ring-1 focus:ring-teal-500"
           name="title"
           value={title}
           id="title"
