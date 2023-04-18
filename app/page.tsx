@@ -19,9 +19,7 @@ export default function Home() {
 
   if(error) return error
   if(isLoading) return <h1>Loading ...</h1>
-
-  console.log(data)
-
+  
   return (
       <main className="flex justify-start my-4 flex-col">
         <AddPost />
