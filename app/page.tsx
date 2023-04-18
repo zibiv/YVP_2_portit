@@ -5,6 +5,7 @@ import AddPost from "./componets/AddPost"
 import { useQuery } from "@tanstack/react-query"
 import Post from "./componets/Post"
 import { type Post as DBPost } from "./types/Posts"
+import Loader from "./componets/Loader"
 //получение всех постов
 async function fetchAllPost() {
   const response = await axios.get('/api/posts/getPosts')
@@ -18,7 +19,7 @@ export default function Home() {
   })
 
   if(error) return error
-  if(isLoading) return <h1>Loading ...</h1>
+  if(isLoading) return <Loader />
   
   return (
       <main className="flex justify-start my-4 flex-col">

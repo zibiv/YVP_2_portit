@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+import Toggle from "./Toggle"
 
 type EditProps = {
   id: string;
@@ -17,7 +18,9 @@ type EditProps = {
 }
 
 export default function EditPost({ userPick, name, title, comments, id }: EditProps) {
+  const [isDelete, setIsDelete] = useState(false)
   return (
+    <>
     <div className="bg-white my-2 p-8 rounded-xl shadow-sm">
       <div className="flex items-center gap-2 ">
         <Image
@@ -38,8 +41,11 @@ export default function EditPost({ userPick, name, title, comments, id }: EditPr
         </Link>
         <button
           className=" text-red-500 "
+          onClick={() => setIsDelete(!isDelete)}
         >Удалить</button>
       </div>
     </div>
+    { isDelete && <Toggle setIsDelete={setIsDelete}/> }
+    </>
   )
 }
