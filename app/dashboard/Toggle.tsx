@@ -1,19 +1,17 @@
 "use client"
 
 type ToggleProps = {
-  setToggle: (fn: (a: boolean) => boolean) => void
+  setToggle: (a: boolean) => void
   deletePost: () => void
 }
 
 export default function Toggle({ setToggle, deletePost }: ToggleProps) {
-  function closeToggle() {
-    setToggle((prev: boolean) => !prev)
-  }
+
   return (
     <div
       className="fixed bg-gray-900/50 w-full h-full z-20 left-0 top-0"
       onClick={(e) => {
-        closeToggle()
+        setToggle(false)
       }}
     >
       <div
@@ -29,8 +27,7 @@ export default function Toggle({ setToggle, deletePost }: ToggleProps) {
           <button
             className=" text-blue-500"
             onClick={(e) => {
-              e.stopPropagation()
-              closeToggle()
+              setToggle(false)
             }}
           >
             отмена
