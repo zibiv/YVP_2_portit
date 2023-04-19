@@ -5,8 +5,9 @@ import Link from "next/link"
 import { useState } from "react"
 import Toggle from "./Toggle"
 import { useMutation } from "@tanstack/react-query"
-import axios from "axios"
-import { error } from "console"
+import axios, { AxiosError } from "axios"
+import { useQueryClient } from "@tanstack/react-query"
+import { toast } from "react-hot-toast"
 
 type EditProps = {
   id: string
@@ -20,6 +21,7 @@ type EditProps = {
   }[]
 }
 
+
 export default function EditPost({
   userPick,
   name,
@@ -28,21 +30,27 @@ export default function EditPost({
   id,
 }: EditProps) {
   const [toggle, setToggle] = useState(false)
+  const qClient = useQueryClient()
+  let deleteToastId = "deletePostId"
 
   const mutation = useMutation(
-    (id: string) => axios.delete("/api/posts/deletePost", { data: { id } }),
+    (id: string) => axios.delete(`/api/posts/deletePost?id=${id}`,),
     {
-      onError: (error) => {
-        console.log(error)
+      onError: (error) => { 
+        if (error instanceof AxiosError) {
+          toast.error("Ошибка: \n" + error?.response?.data.msg, {id: deleteToastId})
+        }
       },
       onSuccess: (data) => {
-        console.log(data)
+        toast.success("Запись удалена", {id: deleteToastId})
         setToggle(false)
+        qClient.invalidateQueries(['authPosts'])
       },
     }
   )
 
   function handleClickDelete () {
+    toast.loading("Удаляем запись", {id: deleteToastId})
     mutation.mutate(id)
   }
 
