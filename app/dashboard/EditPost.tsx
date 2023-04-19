@@ -18,7 +18,7 @@ type EditProps = {
 }
 
 export default function EditPost({ userPick, name, title, comments, id }: EditProps) {
-  const [isDelete, setIsDelete] = useState(false)
+  const [toggle, setToggle] = useState(false)
   return (
     <>
     <div className="bg-white my-2 p-8 rounded-xl shadow-sm">
@@ -41,11 +41,11 @@ export default function EditPost({ userPick, name, title, comments, id }: EditPr
         </Link>
         <button
           className=" text-red-500 "
-          onClick={() => setIsDelete(!isDelete)}
+          onClick={() => setToggle(!toggle)}
         >Удалить</button>
       </div>
     </div>
-    { isDelete && <Toggle setIsDelete={setIsDelete}/> }
+    { toggle && <Toggle setToggle={setToggle}/> }
     </>
   )
 }
