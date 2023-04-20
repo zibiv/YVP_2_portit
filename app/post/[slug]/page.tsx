@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query"
 import { type Post as PostType } from "@/app/types/Posts"
 import axios from "axios"
 import Loader from "@/app/componets/Loader"
+import AddComment from "./AddComment"
+import Comment from "./Comment"
 
 type URL = {
   params: {
@@ -26,7 +28,7 @@ export default function PostDetail(url: URL) {
   if (isLoading) return <Loader />
   console.log(data)
 
-  const props = {
+  const postProps = {
     userPick: data!.user.image,
     name: data!.user.name,
     postTitle: data!.title,
@@ -36,7 +38,16 @@ export default function PostDetail(url: URL) {
 
   return (
     <div>
-      <Post key={data?.id} {...props} />
+      <Post key={data?.id} {...postProps} />
+      {!!data!.comments.length ? data!.comments.map((comment) => (
+        <Comment
+          key={comment.id}
+          id={comment.id}
+          message={comment.message}
+          userId={comment.userId}
+        />
+      )) : <div className="mt-8 text-xl ml-8 text-gra">комментариев еще нет</div>}
+      <AddComment postId={postProps.id} />
     </div>
   )
 }
