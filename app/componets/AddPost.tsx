@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import axios, { AxiosError } from "axios"
-import { Toaster, toast } from "react-hot-toast"
+import { toast } from "react-hot-toast"
 
 export default function CreatePost() {
   const [title, setTitle] = useState("")
@@ -58,9 +58,6 @@ export default function CreatePost() {
       onSubmit={submitPost}
     >
       <div className="flex flex-col my-4">
-        <div>
-          <Toaster position="bottom-right" reverseOrder={false} />
-        </div>
         <textarea
           className="text-lg rounded-md p-4 my-2 bg-gray-200
           focus:outline-none focus:ring-1 focus:ring-teal-500"

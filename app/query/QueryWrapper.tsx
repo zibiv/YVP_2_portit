@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { useEffect, useState } from "react"
+import { Toaster } from "react-hot-toast"
 
 const queryClient = new QueryClient()
 
@@ -41,6 +42,7 @@ export default function QueryWrapper({
   return (
     <QueryClientProvider client={queryClient}>
       {children}
+      <Toaster reverseOrder={false} />
       <button
         className={`fixed bottom-0 right-0 p-4 ${
           showButton ? "block" : "hidden"

@@ -7,7 +7,6 @@ import axios from "axios"
 import { type authPosts } from "../types/AuthPosts"
 import Loader from "../componets/Loader"
 import EditPost from "./EditPost"
-import { Toaster } from "react-hot-toast"
 
 // Function to fetch authenticated posts from server
 async function fetchAuthPost() {
@@ -38,9 +37,6 @@ export default function MyPosts() {
   return (
     !!posts.length ? 
       <div>
-        <div>
-          <Toaster position="top-center" reverseOrder={false} />
-        </div>
         { posts.map((post) => (
           <EditPost
             key={post.id}

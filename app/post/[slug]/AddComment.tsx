@@ -1,14 +1,15 @@
 "use client"
 
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { FormEvent, useState } from "react"
-
+import { toast } from "react-hot-toast"
 
 export default function AddComment({ postId } : { postId: string }) {
   const [message, setMessage] = useState("")
   const [isDisabled, setIsDisabled] = useState(false)
   const qClient = useQueryClient();
+  const addCommentToastId = "addTostId"
 
   const mutation = useMutation((message: string) =>
     axios.post("/api/comments/addComment", { message, postId }), 
@@ -16,7 +17,14 @@ export default function AddComment({ postId } : { postId: string }) {
       onSuccess: (data) => {
         setMessage("")
         setIsDisabled(false)
+        toast.success("Комментарий добавлен", {id: addCommentToastId})
         qClient.invalidateQueries(["postDetail",postId])
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          toast.error("Ошибка: \n" + error?.response?.data.msg, {id: addCommentToastId})
+        }
+        setIsDisabled(false)
       }
     }
   )
@@ -24,6 +32,7 @@ export default function AddComment({ postId } : { postId: string }) {
   async function submitComment(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsDisabled(true)
+    toast.loading("Добавляем комментарий", {id: addCommentToastId})
     mutation.mutate(message)
   }
 
