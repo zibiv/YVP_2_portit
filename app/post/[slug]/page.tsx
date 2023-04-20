@@ -26,7 +26,6 @@ export default function PostDetail(url: URL) {
   })
 
   if (isLoading) return <Loader />
-  console.log(data)
 
   const postProps = {
     userPick: data!.user.image,
@@ -44,7 +43,8 @@ export default function PostDetail(url: URL) {
           key={comment.id}
           id={comment.id}
           message={comment.message}
-          userId={comment.userId}
+          userPick={comment.user!.image}
+          name={comment.user!.name}
         />
       )) : <div className="mt-8 text-xl ml-8 text-gra">комментариев еще нет</div>}
       <AddComment postId={postProps.id} />

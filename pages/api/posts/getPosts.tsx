@@ -18,7 +18,7 @@ export default async function handler(
           createdAt: "desc"
         }
       })
-      console.log(data)
+
       res.status(200).json(data)
     } catch(err) {
       res.status(403).json({ err: "Ошибка получения записей с сервера" })

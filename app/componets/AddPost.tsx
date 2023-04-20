@@ -21,7 +21,7 @@ export default function CreatePost() {
     (title: string) => axios.post("/api/posts/addPost", { title }),
     {
       onError: (error) => {
-        console.log(error)
+
         if (error instanceof AxiosError) {
           toast.error("Ошибка: \n" + error?.response?.data.msg, { id: toastPostId })
         }

@@ -25,7 +25,7 @@ export default async function handler(
       })
       res.status(204).json(result)
     } catch (err) {
-      console.log(err)
+
       res.status(403).json({ err: "При удалении записи возникла ошибка. Обратитесь к администратору." })
     }
   }

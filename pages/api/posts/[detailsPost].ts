@@ -26,7 +26,7 @@ export default async function handler(
           user: true
         }
       })
-      console.log("🎒🎒🎒🎒🎒🎒", data)
+
       res.status(200).json(data)
     } catch (err) {
       res

@@ -5,7 +5,6 @@ import { signOut } from "next-auth/react"
 import Link from "next/link"
 
 export default function Logged({ userPick } : { userPick: string }) {
-  console.log(userPick)
   return (
     <li className="flex gap-8 items-center list-none">
       <button

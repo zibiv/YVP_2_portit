@@ -14,14 +14,13 @@ export default async function handler(
 
     if(!session)
     return res.status(401).json({ msg: "Пожалуйста залогинтесь для того что бы разместить запись."})
-    
-    console.log("✅✅✅✅✅✅", session);
-    
+
     const user = await prisma.user.findUnique({
       where: {
         email: session.user?.email as string
       }
     })
+
 
     if(!user)
       return res.status(404).json({ msg: "Такого пользователя не существует." })
@@ -34,12 +33,15 @@ export default async function handler(
           message,
           userId: user.id,
           postId: postId
+        },
+        include: {
+          user: true
         }
       })
-      console.log(data)
+
       res.status(200).json(data)
     } catch(err) {
-      console.log(err)
+
       res.status(403).json({ err: "При добавлении комментария возникла ошибка. Обратитесь к администратору." })
     }
 
