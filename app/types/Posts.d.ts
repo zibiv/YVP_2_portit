@@ -12,6 +12,7 @@ export interface Comment {
   message: string;
   userId: string;
   postId: string;
+  user?: User
 }
 
 export interface Post {
