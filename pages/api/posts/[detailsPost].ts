@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
 
-    const postId = req.query?.detailsPost as string || ""
+    const postId = req.query?.detailsPost as string
 
     try {
       const data = await prisma.post.findUnique({
@@ -26,6 +26,7 @@ export default async function handler(
           user: true
         }
       })
+      console.log("🎒🎒🎒🎒🎒🎒", data)
       res.status(200).json(data)
     } catch (err) {
       res
