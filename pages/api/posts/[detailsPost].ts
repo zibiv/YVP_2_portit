@@ -1,4 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
+import { getServerSession } from "next-auth"
+import { authOptions } from "../auth/[...nextauth]"
 import prisma from "../../../prisma/client"
 
 export default async function handler(
@@ -6,6 +8,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
+
+    const session = await getServerSession(req, res, authOptions);
 
     const postId = req.query?.detailsPost as string
 
@@ -17,7 +21,7 @@ export default async function handler(
         include: {
           comments: {
             orderBy: {
-              createdAt: "desc"
+              createdAt: "asc"
             }, 
             include: {
               user: true
@@ -27,7 +31,9 @@ export default async function handler(
         }
       })
 
-      res.status(200).json(data)
+
+
+      res.status(200).json({...data, sessionEmail: session?.user?.email})
     } catch (err) {
       res
         .status(403)

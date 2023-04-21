@@ -19,9 +19,10 @@ async function fetchPostDetail(slug: string) {
   return res.data
 }
 
+
 export default function PostDetail(url: URL) {
-  const { data, isLoading, error } = useQuery<PostType>({
-    queryKey: ["postDetail", url.params.slug],
+  const { data, isLoading } = useQuery<PostType>({
+    queryKey: [url.params.slug],
     queryFn: () => fetchPostDetail(url.params.slug),
   })
 
@@ -36,18 +37,22 @@ export default function PostDetail(url: URL) {
   }
 
   return (
-    <div>
+    <>
       <Post key={data?.id} {...postProps} />
-      {!!data!.comments.length ? data!.comments.map((comment) => (
+      {!!data?.comments.length ? data?.comments.map((comment) => {
+        const isUserCanDelete = comment.user?.email ===data.sessionEmail
+        return (
         <Comment
           key={comment.id}
           id={comment.id}
+          idPost={data!.id}
           message={comment.message}
           userPick={comment.user!.image}
           name={comment.user!.name}
+          isUserCanDelete={isUserCanDelete}
         />
-      )) : <div className="mt-8 text-xl ml-8 text-gra">комментариев еще нет</div>}
+      )}) : <div className="mt-8 text-xl ml-8 text-gra">комментариев еще нет</div>}
       <AddComment postId={postProps.id} />
-    </div>
+    </>
   )
 }
